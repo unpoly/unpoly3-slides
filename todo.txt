@@ -1,0 +1,1 @@
+- Possibly remove Last-Modified from all examples and just use ETags
