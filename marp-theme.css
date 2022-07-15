@@ -57,13 +57,14 @@ h1 {
   position: relative;
 }
 
-.color-secondary {
-  color: var(--secondaryColor);
+section.secondary-color {
+  --highlightColor: var(--secondaryColor);
 }
 
 h1 code,
 h2 code,
-h3 code {
+h3 code,
+h4 code {
   background: none;
   padding: 0;
 }
@@ -80,6 +81,11 @@ h1:before {
   opacity: 0.5;
 }
 */
+
+h4 {
+  margin-top: 0.3em;
+  margin-bottom: 0.4em;
+}
 
 
 .row {

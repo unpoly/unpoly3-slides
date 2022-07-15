@@ -60,8 +60,10 @@ Unpoly 3 objectives
 
 
 ---
+<!-- _class: secondary-color -->
 
-<h1 class="color-secondary">This will be a smooth update</h1>
+
+# This will be a smooth update
 
 - Upgrade from v2 to v3 will be *much* smoother than going from v1 to v2.
 - Almost all are breaking changes are polyfilled by [`unpoly-migrate.js`](https://unpoly.com/changes/upgrading).
@@ -117,16 +119,14 @@ This has many benefits:
 
 ---
 
-`up.network.config.cacheExpireAge`
-----------------------------------
+### `up.network.config.cacheExpireAge`
 
 - Defaults to 15 seconds (down from 5 minutes in Unpoly 2)
 - When cached content exceeds this age we perform cache revalidation\
  (reload a rendered fragment)
 
 
-`up.network.config.cacheEvictAge`
----------------------------------
+### `up.network.config.cacheEvictAge`
 
 - Defaults to 90 minutes (lower for low-memory devices)
 - When cached content exceeds this age we delete it from the cache
@@ -261,7 +261,7 @@ Modification time or content hash?
 ----------------------------------
 
 
-Servers can use both `Last-Modified` and `ETag`, but `ETag` take precedence.
+Servers can use both `Last-Modified` and `ETag`, but `ETag` takes precedence.
 
 It's easier to mix in additional data into an `ETag`, e.g. the ID of the logged in user or the currently deployed commit revision.
 
@@ -486,13 +486,18 @@ More use cases for `up.fragment.onAborted()` from Unpoly's own features:
 
 ---
 
-Exemptions
-----------
+Exemption: Don't abort others
+------------------
 
-To not abort the targeted fragments, use `{ abort: false }` or `[up-abort=false]`.
+To not abort requests targeting the same fragments,\
+render with `{ abort: false }` or `[up-abort=false]`.
+
+
+
+Exemption: Don't abort me
+--------------
 
 To make a request that will not be aborted by another fragment update, use `{ abortable: false }` or `[up-abortable=false]`.
-
 
 
 Preloading
@@ -626,15 +631,39 @@ Concurrent `[up-validate]`: Consistency without disabling
 Watch rework
 ============
 
-- `up.observe()` is now `up.watch()`
-- `[up-observe]` is now `[up-watch]`
-- Every form field can configure individual options for watching and validation.\
-  For instance, a field may choose to validate on `input` instead of on `change`.
+`[up-observe]` is now `[up-watch]`\
+`up.observe()` is now `up.watch()`
+
+They gain more options.
 
 ---
 
 Field-specific watch options
 ----------------------------
+
+Every form field can configure individual options for watching and validation.\
+Options can be set for a field, the entire form or any container element.
+
+#### `[up-watch-event]`
+
+Which event triggers watch callbacks or validation (e.g. `input` or `change`).
+
+#### `[up-watch-delay]`
+
+How many milliseconds to wait after a change before a watch callback or validation is run.
+
+#### `[up-watch-disable]`
+
+Whether to disable this form (or any fragment) while an async watch callback or validation is running.
+
+#### `[up-watch-feedback]`
+
+Whether to set `.up-active` and `.up-loading` classes while an async watch callback or validation is running.
+
+---
+
+Example
+-------
 
 ```html
 <form method="post" action="/purchases">

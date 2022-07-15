@@ -20,7 +20,7 @@ code {
   padding: 0 0.2em;
   font-size: 1.02em;
 }
-*/div#p>svg>foreignObject>section .center{text-align:center}div#p>svg>foreignObject>section h1{color:var(--highlightColor);position:relative}div#p>svg>foreignObject>section .color-secondary{color:var(--secondaryColor)}div#p>svg>foreignObject>section h1 code,div#p>svg>foreignObject>section h2 code,div#p>svg>foreignObject>section h3 code{background:none;padding:0}
+*/div#p>svg>foreignObject>section .center{text-align:center}div#p>svg>foreignObject>section h1{color:var(--highlightColor);position:relative}div#p>svg>foreignObject>section.secondary-color{--highlightColor:var(--secondaryColor)}div#p>svg>foreignObject>section h1 code,div#p>svg>foreignObject>section h2 code,div#p>svg>foreignObject>section h3 code,div#p>svg>foreignObject>section h4 code{background:none;padding:0}
 
 /*
 h1:before {
@@ -33,7 +33,7 @@ h1:before {
   height: 0.8em;
   opacity: 0.5;
 }
-*/div#p>svg>foreignObject>section .row{display:flex;gap:2em}div#p>svg>foreignObject>section .col{flex:1 1 0}div#p>svg>foreignObject>section .title{margin:0 auto}div#p>svg>foreignObject>section .title--logo{width:600px}div#p>svg>foreignObject>section .title--author{border-top:2px solid currentColor;font-weight:bold;width:380px;text-align:center;margin:15px auto 0;padding-top:10px}div#p>svg>foreignObject>section .title--author a[href]{color:var(--textColor);text-decoration:none}div#p>svg>foreignObject>section.topic h1{font-size:2.6em;font-family:Orbitron,sans-serif;text-transform:uppercase}div#p>svg>foreignObject>section.new:before,div#p>svg>foreignObject>section.pro:before{content:'JAN';background-color:white;position:absolute;left:-110px;top:-60px;text-align:center;padding:90px 90px 10px;color:white;background-color:var(--textColor);font-size:28px;font-weight:bold;transform:rotate(-45deg)
+*/div#p>svg>foreignObject>section h4{margin-top:0.3em;margin-bottom:0.4em}div#p>svg>foreignObject>section .row{display:flex;gap:2em}div#p>svg>foreignObject>section .col{flex:1 1 0}div#p>svg>foreignObject>section .title{margin:0 auto}div#p>svg>foreignObject>section .title--logo{width:600px}div#p>svg>foreignObject>section .title--author{border-top:2px solid currentColor;font-weight:bold;width:380px;text-align:center;margin:15px auto 0;padding-top:10px}div#p>svg>foreignObject>section .title--author a[href]{color:var(--textColor);text-decoration:none}div#p>svg>foreignObject>section.topic h1{font-size:2.6em;font-family:Orbitron,sans-serif;text-transform:uppercase}div#p>svg>foreignObject>section.new:before,div#p>svg>foreignObject>section.pro:before{content:'JAN';background-color:white;position:absolute;left:-110px;top:-60px;text-align:center;padding:90px 90px 10px;color:white;background-color:var(--textColor);font-size:28px;font-weight:bold;transform:rotate(-45deg)
   /* box-shadow: 0 5px 40px rgba(40, 40, 40, 0.2); */}div#p>svg>foreignObject>section.new:before,div#p>svg>foreignObject>section.pro:before{--marpit-root-font-size:28px}div#p>svg>foreignObject>section.new:before{content:'NEW';background-color:var(--highlightColor)}div#p>svg>foreignObject>section.align-top{justify-content:flex-start}div#p>svg>foreignObject>section.no-padding{padding:0}div#p>svg>foreignObject>section.small-padding{padding:2em}div#p>svg>foreignObject>section .positive{color:#37c04e}div#p>svg>foreignObject>section .negative{color:#ff5050}
 
 /*
@@ -100,8 +100,8 @@ who want to learn about the major changes in Unpoly 3.</strong></p>
 </ul>
 </div>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="4" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
-<h1 class="color-secondary">This will be a smooth update</h1>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="4" data-class="secondary-color" data-theme="unpoly3-slides" class="secondary-color" style="--class:secondary-color;--theme:unpoly3-slides;">
+<h1>This will be a smooth update</h1>
 <ul>
 <li>Upgrade from v2 to v3 will be <em>much</em> smoother than going from v1 to v2.</li>
 <li>Almost all are breaking changes are polyfilled by <a href="https://unpoly.com/changes/upgrading"><code>unpoly-migrate.js</code></a>.</li>
@@ -145,13 +145,13 @@ allowing instant navigation for 90 minutes.</li>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="8" data-class="no-watermark" data-theme="unpoly3-slides" class="no-watermark" style="--class:no-watermark;--theme:unpoly3-slides;"><img src="images/cache.svg" height="100%" />
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="9" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
-<h2><code>up.network.config.cacheExpireAge</code></h2>
+<h3><code>up.network.config.cacheExpireAge</code></h3>
 <ul>
 <li>Defaults to 15 seconds (down from 5 minutes in Unpoly 2)</li>
 <li>When cached content exceeds this age we perform cache revalidation<br />
 (reload a rendered fragment)</li>
 </ul>
-<h2><code>up.network.config.cacheEvictAge</code></h2>
+<h3><code>up.network.config.cacheEvictAge</code></h3>
 <ul>
 <li>Defaults to 90 minutes (lower for low-memory devices)</li>
 <li>When cached content exceeds this age we delete it from the cache</li>
@@ -224,7 +224,7 @@ The default setting is:</p>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="16" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>Modification time or content hash?</h2>
-<p>Servers can use both <code>Last-Modified</code> and <code>ETag</code>, but <code>ETag</code> take precedence.</p>
+<p>Servers can use both <code>Last-Modified</code> and <code>ETag</code>, but <code>ETag</code> takes precedence.</p>
 <p>It's easier to mix in additional data into an <code>ETag</code>, e.g. the ID of the logged in user or the currently deployed commit revision.</p>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="17" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
@@ -360,8 +360,10 @@ This also aborted background requests, or requests for unrelated regions like <c
 </ul>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="28" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
-<h2>Exemptions</h2>
-<p>To not abort the targeted fragments, use <code>{ abort: false }</code> or <code>[up-abort=false]</code>.</p>
+<h2>Exemption: Don't abort others</h2>
+<p>To not abort requests targeting the same fragments,<br />
+render with <code>{ abort: false }</code> or <code>[up-abort=false]</code>.</p>
+<h2>Exemption: Don't abort me</h2>
 <p>To make a request that will not be aborted by another fragment update, use <code>{ abortable: false }</code> or <code>[up-abortable=false]</code>.</p>
 <h2>Preloading</h2>
 <p>Preloading never aborts targeted fragments.</p>
@@ -454,15 +456,25 @@ Additional validations are queued until the current validation request has loade
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="33" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Watch rework</h1>
-<ul>
-<li><code>up.observe()</code> is now <code>up.watch()</code></li>
-<li><code>[up-observe]</code> is now <code>[up-watch]</code></li>
-<li>Every form field can configure individual options for watching and validation.<br />
-For instance, a field may choose to validate on <code>input</code> instead of on <code>change</code>.</li>
-</ul>
+<p><code>[up-observe]</code> is now <code>[up-watch]</code><br />
+<code>up.observe()</code> is now <code>up.watch()</code></p>
+<p>They gain more options.</p>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="34" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>Field-specific watch options</h2>
+<p>Every form field can configure individual options for watching and validation.<br />
+Options can be set for a field, the entire form or any container element.</p>
+<h4><code>[up-watch-event]</code></h4>
+<p>Which event triggers watch callbacks or validation (e.g. <code>input</code> or <code>change</code>).</p>
+<h4><code>[up-watch-delay]</code></h4>
+<p>How many milliseconds to wait after a change before a watch callback or validation is run.</p>
+<h4><code>[up-watch-disable]</code></h4>
+<p>Whether to disable this form (or any fragment) while an async watch callback or validation is running.</p>
+<h4><code>[up-watch-feedback]</code></h4>
+<p>Whether to set <code>.up-active</code> and <code>.up-loading</code> classes while an async watch callback or validation is running.</p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="35" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+<h2>Example</h2>
 <pre><code class="language-html"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;post&quot;</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;/purchases&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;continent&quot;</span> <span class="hljs-attr">up-validate</span>=<span class="hljs-string">&quot;[name=country]&quot;</span> <span class="hljs-attr">up-watch-disable</span>=<span class="hljs-string">&quot;[name=country]&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;country&quot;</span> <span class="hljs-attr">up-validate</span>=<span class="hljs-string">&quot;[name=price]&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
@@ -474,7 +486,7 @@ For instance, a field may choose to validate on <code>input</code> instead of on
 <p>The <code>[up-watch-disable]</code> attribute disables the country select while new countries are loading after a continent changes.</p>
 <p>The <code>[up-watch-event]</code> attribute updates the price while the user is typing in the weight field (instead of waiting until the field is blurred).</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="35" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="36" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Handling disconnects</h1>
 <p>Unpoly 3 lets you handle connection loss with an <code>{ onOffline }</code> or <code>[up-on-offline]</code> callback:</p>
 <pre><code class="language-html"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;...&quot;</span> <span class="hljs-attr">up-on-offline</span>=<span class="hljs-string">&quot;if (confirm(&#x27;Retry&#x27;?) event.retry()&quot;</span>&gt;</span>Post bid<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
@@ -483,7 +495,7 @@ For instance, a field may choose to validate on <code>input</code> instead of on
 <pre><code class="language-js"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>up.on(<span class="hljs-string">&#x27;up:fragment:offline&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> <span class="hljs-keyword">if</span> (confirm(<span class="hljs-string">&#x27;Retry&#x27;</span>?)) event.retry())
 </span></span></foreignObject></svg></code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="36" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="37" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>Handling &quot;Lie-Fi&quot;</h2>
 <p>Often our device reports a connection, but we're effectively offline:</p>
 <ul>
@@ -498,7 +510,7 @@ For instance, a field may choose to validate on <code>input</code> instead of on
 <li>Timeouts will now trigger <code>onOffline()</code> (used to by <code>onAborted()</code>)</li>
 </ul>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="37" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="38" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>Expired pages remain accessible while offline</h2>
 <ul>
 <li>Cached content will remain navigatable for 90 minutes</li>
@@ -506,7 +518,7 @@ For instance, a field may choose to validate on <code>input</code> instead of on
 <li>Clicking uncached content will not change the page and trigger <code>onOffline()</code></li>
 </ul>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="38" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="39" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>Limitations: This isn't full offline support (yet)</h2>
 <ul>
 <li>The cache is still in-memory and dies with the browser tab</li>
@@ -514,22 +526,22 @@ For instance, a field may choose to validate on <code>input</code> instead of on
 <li>For a full offline experience (content with empty cache) we recommend a <a href="https://web.dev/offline-fallback-page/">service worker</a> or a canned solution like <a href="https://www.talater.com/upup/">UpUp</a> (similarities in name are coincidental)</li>
 </ul>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="39" data-class="topic" data-theme="unpoly3-slides" class="topic" style="--class:topic;--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="40" data-class="topic" data-theme="unpoly3-slides" class="topic" style="--class:topic;--theme:unpoly3-slides;">
 <h1>Quality of life</h1>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="40" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="41" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Optional targets</h1>
 <p>The following would require fragments matching <code>.content</code> and <code>.navigation</code>.</p>
 <p>The fragment <code>.flashes</code> will only be updated if there is a match in both the current page and server response (like <code>[up-hungry]</code>).</p>
 <pre><code class="language-html"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/post&quot;</span> <span class="hljs-attr">up-target</span>=<span class="hljs-string">&quot;.content, .flashes:maybe, .navigation&quot;</span>&gt;</span>
 </span></span></foreignObject></svg></code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="41" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="42" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>More control over <code>[up-hungry]</code></h1>
 <p>Elements with an <code>[up-hungry]</code> attribute are updated whenever the server sends a matching element, even if the element isn't targeted.</p>
 <p>Unpoly 3 lets you control which layer and which target to piggy-back on.</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="42" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="43" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>Controlling which layer to piggy-back on</h2>
 <p>By default Unpoly only considers <code>[up-hungry]</code> fragments in the updating layer.</p>
 <p>With <code>[up-if-layer=any]</code> a hungry fragment will be considered for updates in <em>any</em> layer.</p>
@@ -538,7 +550,7 @@ For instance, a field may choose to validate on <code>input</code> instead of on
 <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;unread-messages&quot;</span> <span class="hljs-attr">up-if-layer</span>=<span class="hljs-string">&quot;any&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 </span></span></foreignObject></svg></code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="43" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="44" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>Controlling which targets to piggy-back on</h2>
 <p>By default Unpoly considers <code>[up-hungry]</code> fragments for any update in its layer.</p>
 <p>With <code>[up-if-target]</code> you can restrict which updates a hungry fragment will piggy-back on.</p>
@@ -547,7 +559,7 @@ but not when we update smaller fragments:</p>
 <pre><code class="language-html"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;canonical&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;...&quot;</span> <span class="hljs-attr">up-if-target</span>=<span class="hljs-string">&quot;:main&quot;</span> /&gt;</span>
 </span></span></foreignObject></svg></code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="44" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="45" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Shorter data attributes</h1>
 <p>Unpoly always had <a href="https://unpoly.com/up-data"><code>[up-data]</code></a> to attach structured data to an element.</p>
 <p>This is verbose when we're attaching simple key/value pairs:</p>
@@ -557,7 +569,7 @@ but not when we update smaller fragments:</p>
 <pre><code class="language-html"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;user&quot;</span> <span class="hljs-attr">data-name</span>=<span class="hljs-string">&quot;&lt;%= @user.name %&gt;&quot;</span>&gt;</span>
 </span></span></foreignObject></svg></code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="45" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="46" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <p>In Unpoly 3 Simple data key/values can be attached with both <code>[up-data]</code> and HTML5 data attributes.</p>
 <p>These three elements produce the same compiler data:</p>
 <pre><code class="language-html"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">up-data</span>=<span class="hljs-string">&#x27;{ &quot;foo&quot;: &quot;one&quot;, &quot;bar&quot;: &quot;two&quot; }&#x27;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
@@ -571,13 +583,13 @@ but not when we update smaller fragments:</p>
 </span></span></foreignObject></svg></code></pre>
 <p>Note that HTML5 data attributes are always strings.</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="46" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="47" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Highlighting the targeted fragment</h1>
 <p>Targeted fragments get an <code>.up-loading</code> class.<br />
 This lets you highlight the part of the screen that's loading.</p>
 <p>Targeted fragments also get an <a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-busy"><code>[aria-busy]</code></a> attribute.</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="47" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="48" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>Example</h2>
 <p>A link targeting a fragment:</p>
 <pre><code class="language-html"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/path&quot;</span> <span class="hljs-attr">up-target</span>=<span class="hljs-string">&quot;.target&quot;</span>&gt;</span>
@@ -592,14 +604,14 @@ This lets you highlight the part of the screen that's loading.</p>
 <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;target&quot;</span>&gt;</span>new text<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 </span></span></foreignObject></svg></code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="48" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="49" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Log separated by interactions</h1>
 <p>The log has a lot of debug information. It's often hard to find where the relevant output begins and ends.</p>
 <p>The new log shows which user interaction triggered an event chain.</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="49" data-class="no-watermark no-padding" data-theme="unpoly3-slides" class="no-watermark no-padding" style="--class:no-watermark no-padding;--theme:unpoly3-slides;"><img src="./images/log-interaction-event.png" alt="New log" class="picture" style="width: 80%; margin: auto;" />
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="50" data-class="no-watermark no-padding" data-theme="unpoly3-slides" class="no-watermark no-padding" style="--class:no-watermark no-padding;--theme:unpoly3-slides;"><img src="./images/log-interaction-event.png" alt="New log" class="picture" style="width: 80%; margin: auto;" />
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="50" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="51" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Playing nice with foreign overlays</h1>
 <p>Unpoly 2 sometimes clashes with overlays from other libraries (&quot;foreign overlay&quot;) like Bootstrap or TinyMCE:</p>
 <ul>
@@ -612,7 +624,7 @@ This lets you highlight the part of the screen that's loading.</p>
 </span></span></foreignObject></svg></code></pre>
 <p>However, the solution is custom to every library.</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="51" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="52" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>Making Unpoly aware of foreign overlays</h2>
 <p>You can push a selector into <code>up.layer.config.foreignOverlaySelectors</code> and Unpoly will no longer have layer-related opinions over that region. You no longer need to re-attach the foreign overlay element.</p>
 <p>Example from <code>unpoly-bootstrap5.js</code>:</p>
@@ -623,14 +635,14 @@ This lets you highlight the part of the screen that's loading.</p>
 )
 </span></span></foreignObject></svg></code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="52" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="53" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>More control over the progress bar</h1>
 <p>Unpoly 2 shows a progress bar when any request takes too long to load.</p>
 <p>This may be unwanted for requests are loading in the background, or have longer load
 times in the best of cases (e.g. a large report).</p>
 <p>Unpoly 3 gives you more control over if and when the progress bar shows.</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="53" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="54" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>Background requests</h2>
 <p>Pass { background: true } or [up-background] when rendering or making a request</p>
 <p>Background requests never trigger the progress bar.<br />
@@ -641,13 +653,13 @@ Background requests are also deprioritized.</p>
 <li>Preload requests are background requests automatically</li>
 </ul>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="54" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="55" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>Custom target response times</h2>
 <p>You can also set <code>[up-bad-response-time]</code> on an individual link:</p>
 <pre><code class="language-html"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/huge-report&quot;</span> <span class="hljs-attr">up-bad-response-time</span>=<span class="hljs-string">&quot;10_000&quot;</span>&gt;</span>Open report<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
 </span></span></foreignObject></svg></code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="55" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="56" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Extensive render callbacks</h1>
 <p>You may now pass callback functions to intervene at many points
 in the rendering lifecycle.</p>
@@ -665,7 +677,7 @@ in the rendering lifecycle.</p>
 })
 </span></span></foreignObject></svg></code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="56" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="57" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Strict target derivation</h1>
 <p>Unpoly often needs to <em>derive</em> a target selector from an element.<br />
 Some features that do this are <code>[up-poll]</code>, <code>up.reload()</code>, <code>[up-hungry]</code>.</p>
@@ -685,7 +697,7 @@ order of priority:</p>
 <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;canonical&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;...&quot;</span> <span class="hljs-attr">up-hungry</span>&gt;</span> <span class="hljs-comment">&lt;!-- targets &quot;link&quot;, matching the stylesheet --&gt;</span>
 </span></span></foreignObject></svg></code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="57" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="58" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>New target derivation patterns</h2>
 <p>Unpoly 3 lets you configure patterns to use for target derivation.<br />
 The following patterns are configured by default:</p>
@@ -707,7 +719,7 @@ The following patterns are configured by default:</p>
 <p>Note that tag names are now only used for unique elements (like <code>&lt;body&gt;</code> or <code>&lt;main&gt;</code>).</p>
 <p>You can also push a function if your deriver can't be expressed in a pattern string.</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="58" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="59" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>Derived target verification</h2>
 <ul>
 <li>Unpoly 3 will verify if a derived targets will actually match the element.</li>
@@ -716,7 +728,7 @@ The following patterns are configured by default:</p>
 You probably want to fix these cases by setting an <code>[id]</code>, <code>[up-id]</code> or <code>[class]</code> attribute.</li>
 </ul>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="59" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="60" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Detect failure when server sends incorrect HTTP status</h1>
 <p>Unpoly can render different content for <a href="https://unpoly.com/server-errors">failed responses</a>.<br />
 E.g. a successful form submission should the main element when successful.<br />
@@ -726,7 +738,7 @@ E.g. an invalid form should render with HTTP 400 (Bad Request).</p>
 <p>Unfortunately misconfigured server endpoints will send HTTP 200 (OK) for failed responses.<br />
 This is not always easy to fix, e.g. when screens are rendered by libraries outside your control.</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="60" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="61" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>Forcing failure</h2>
 <p>Listeners to <code>up:fragment:loaded</code> can now force a failure, even for responses that are <code>200 OK</code>.</p>
 <pre><code class="language-js"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>up.on(<span class="hljs-string">&#x27;up:fragment:loaded&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
@@ -741,7 +753,7 @@ This is not always easy to fix, e.g. when screens are rendered by libraries outs
   (response.status &lt; <span class="hljs-number">200</span> || response.status &gt; <span class="hljs-number">299</span>) &amp;&amp; response.status !== <span class="hljs-number">304</span>
 </span></span></foreignObject></svg></code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="61" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="62" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Focus restoration</h1>
 <p>Focus is saved automatically and restored when using the back and forward button.</p>
 <p>Saved state includes:</p>
@@ -752,7 +764,7 @@ This is not always easy to fix, e.g. when screens are rendered by libraries outs
 <li>The scroll position within a focused input element.</li>
 </ul>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="62" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="63" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h2>Explicit focus restoration</h2>
 <ul>
 <li><code>&lt;a href=&quot;/path&quot; up-follow up-focus=&quot;restore&quot;&gt;</code></li>
@@ -762,13 +774,13 @@ This is not always easy to fix, e.g. when screens are rendered by libraries outs
 <p>Note that Unpoly already had <code>{ focus: 'keep' }</code> to preserve focus within
 an updating fragment.</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="63" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="64" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>IE11 removal</h1>
 <p>Unpoly 3 will no longer boot on IE11 or <a href="https://en.wikipedia.org/wiki/EdgeHTML">legacy Edge (EdgeHTML)</a>.<br />
 If you need to support Internet Explorer 11, use Unpoly 2.</p>
 <p>This allowed us to delete a lot of internal code.</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="64" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="65" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <p>Functions with a native replacement have been moved to <code>unpoly-migrate.js</code>:</p>
 <table>
 <thead>
@@ -813,11 +825,11 @@ If you need to support Internet Explorer 11, use Unpoly 2.</p>
 </tbody>
 </table>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="65" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="66" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Many other features and fixes</h1>
 <p>See <a href="https://github.com/unpoly/unpoly/blob/master/CHANGELOG.md">full CHANGELOG</a>.</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="66" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="67" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Breaking changes</h1>
 <p>Probably none with <a href="https://unpoly.com/changes/upgrading"><code>unpoly-migrate.js</code></a>.</p>
 <p>You should test if you're seeing any errors with:</p>
@@ -826,29 +838,29 @@ If you need to support Internet Explorer 11, use Unpoly 2.</p>
 <li>Cache revalidation</li>
 </ul>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="67" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="68" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h3>Strict target derivation</h3>
 <p>Disable with:</p>
 <pre><code class="language-js"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>up.fragment.config.verifyDerivedTarget = <span class="hljs-literal">false</span>
 up.fragment.config.targetDerivers.push(<span class="hljs-string">&#x27;*&#x27;</span>)
 </span></span></foreignObject></svg></code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="68" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="69" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h3>Cache Revalidation</h3>
 <p>Disable with:</p>
 <pre><code class="language-js"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>up.fragment.config.autoRevalidate = <span class="hljs-literal">false</span>
 up.network.config.cacheEvictAge = up.network.config.cacheExpireAge = <span class="hljs-number">15</span> * <span class="hljs-number">60</span> * <span class="hljs-number">1000</span>
 </span></span></foreignObject></svg></code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="69" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="70" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Unpoly 3 objectives</h1>
 <p>Repeat card from intro</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="70" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="71" data-theme="unpoly3-slides" style="--theme:unpoly3-slides;">
 <h1>Availability</h1>
 <p>Unpoly 3 is scheduled to release in late summer 2022.</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="71" data-class="no-watermark" data-theme="unpoly3-slides" class="no-watermark" style="--class:no-watermark;--theme:unpoly3-slides;"><div class="title">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="72" data-class="no-watermark" data-theme="unpoly3-slides" class="no-watermark" style="--class:no-watermark;--theme:unpoly3-slides;"><div class="title">
   <img src="./images/unpoly3.svg" alt="Unpoly 3" class="title--logo" />
   <div class="title--author">
     Henning Koch&nbsp; <a href="https://twitter.com/triskweline">@triskweline</a>
