@@ -29,7 +29,7 @@ section.rails-specific {
   background-image: url('./images/rails.svg') !important;
   background-size: 180px !important;
   --highlightColor: #D30001;
-  box-shadow: inset 0 15px 0 var(--highlightColor);
+  box-shadow: inset 0 15px 0 var(--highlightColor), inset 0 -15px 0 var(--highlightColor);
 }
 
 .muted {

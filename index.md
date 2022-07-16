@@ -137,7 +137,8 @@ This has many benefits:
 Controlling when to revalidate
 ------------------------------
 
-You may configure what responses to revalidate, e.g. to exclude certain paths.\
+You may configure what responses to revalidate, e.g. to exclude certain paths.
+
 The default setting is:
 
 
@@ -150,6 +151,37 @@ You may also disable revalidation for an individual link:
 ```html
 <a href="/path" up-follow up-revalidate="false">
 ```
+
+
+---
+
+Migrating Unpoly 2 apps
+-----------------------
+
+Since caching is now always desired, you may want to remove any exemptions in your app.
+
+#### Remove custom expiry times:
+
+```js
+up.network.config.cacheExpiry = 10_0000
+```
+
+#### Remove individual links bypassing the cache
+
+```html
+<a href="/path" up-follow up-cache="false">...</a>
+```
+
+```js
+up.render({ url: '/path', cache: false })
+```
+
+#### Remove global cache exemptions
+
+```js
+up.network.config.autoCache = (request) => !request.path.startsWith('/dashboard') && ...
+```
+
 
 
 ---
@@ -176,21 +208,28 @@ Does this cause more requests?
 
 With revalidation your app will make as many requests as a plain web app.
 
-With revalidation your app will make as many requests as an Unpoly 2 app with short cache expiry.
+With revalidation your app will make as many requests as an Unpoly 2 app with short cache expiry.\
+Many of our projects have configured cache expiry to "fix" stale content.
 
-**Optionally** our server can implement *conditional GET* so reloading is effectively free for the server.
+**Optionally** your app can support *conditional requests* so reloading is effectively free for the server.
 
 
 ----
 
-Conditional GET support
-===============
+Conditional request support
+===========================
+
+Conditional requests is an old HTTP feature ([RFC 7232](https://datatracker.ietf.org/doc/html/rfc7232)).
+
+It lets browser ask for content newer than a known modification time,\
+or content different from a known content hash.
 
 
 -----
+<!-- _class: no-watermark -->
 
-GET conditional on modification time 
-------------------------------------
+Requesting content newer than a known modification time 
+-------------------------------------------------------
 
 Browser requests a URL for the first time:
 
@@ -198,7 +237,7 @@ Browser requests a URL for the first time:
 GET /foo HTTP/1.1
 ```
 
-Server responds with content and modification time (e.g. `#updated_at`):
+Server responds with content and last modification time (e.g. `#updated_at`):
 
 
 ```http
@@ -222,9 +261,10 @@ HTTP/1.1 304 Not Modified
 
 
 -----
+<!-- _class: no-watermark -->
 
-GET conditional on content hash
--------------------------------
+Requesting content changed from a known content hash
+----------------------------------------------------
 
 Browser requests a URL for the first time:
 
@@ -261,15 +301,17 @@ Modification time or content hash?
 ----------------------------------
 
 
-Servers can use both `Last-Modified` and `ETag`, but `ETag` takes precedence.
+Servers can use both `Last-Modified` and `ETag`, but `ETag` always takes precedence.
 
 It's easier to mix in additional data into an `ETag`, e.g. the ID of the logged in user or the currently deployed commit revision.
 
 
 ----
+<!-- _class: no-watermark -->
 
-Unpoly 3 supports conditional GET when reloading
--------------------------------------------------
+
+Unpoly 3 supports conditional requests when reloading
+-----------------------------------------------------
 
 Unpoly remembers the `Last-Modified` and `ETag` headers a fragment was delivered with:
 
@@ -279,7 +321,7 @@ Unpoly remembers the `Last-Modified` and `ETag` headers a fragment was delivered
 </div>
 ```
 
-When the fragment is reloaded:
+When the fragment is reloaded, Unpoly echoes these values using standard HTTP headers:
 
 ```http
 GET /messages HTTP/1.1
@@ -288,7 +330,7 @@ If-Modified-Since: Wed, 21 Oct 2015 07:28:00 GMT
 If-None-Match: "x234dff"
 ```
 
-If no fresher data exists, the server may skip rendering and respond with:
+If no fresher data exists, the server may skip rendering and respond without content:
 
 ```http
 HTTP/1.1 304 Not Modified
@@ -301,23 +343,23 @@ In practice you would use either `Last-Modified` or `ETag`, but never both.
 
 ----
 
-Your app should probably support conditional GET
-------------------------------------------------
+Your app should probably support conditional requests
+-----------------------------------------------------
 
 This improves **all** cases where we access a previously visited page:
 
 - Speed up page loads without Unpoly
 - Less server load for cache revalidation.
 - Less server load for [`[up-poll]`](https://unpoly.com/up-poll)
-- Prevent unncessary re-rendering of identical content.
+- Prevent unnecessary re-rendering of identical content.
 
 
 ----
 <!-- _class: rails-specific -->
 
 
-Implementing conditional GET in Ruby on Rails
-=============================================
+Implementing conditional requests in Ruby on Rails
+==================================================
 
 **If you're not a Rails user**, skip to a slide without the Rails logo ↗.
 
@@ -376,9 +418,9 @@ Use [`Rack::SteadyETag`](https://github.com/makandra/rack-steady_etag) to addres
 All of this is optional!
 ------------------------
 
-Cache revalidation will work **with or without** conditional GET support.
+Cache revalidation will work **with or without** conditional request support.
 
-If your app does not support conditional GET, cache revalidation will cause as many requests as an Unpoly 2 app with short cache expiry.
+If your app does not support conditional requests, cache revalidation will cause as many requests as an Unpoly 2 app with short cache expiry.
 
 
 ----
@@ -389,11 +431,13 @@ Concurrent updates to the same fragment
 
 <div class="row">
 <div class="col" style="flex-basis: auto">
-<img src="images/layout-side-main.svg" style="height: 150px; margin: 0;">
+<img src="images/layout-side-main.svg" style="height: 135px; margin: 0;">
 </div>
 <div class="col" style="flex-basis: auto">
 
 When two requests target `main`, what should happen?
+
+The answer to that changed throughout Unpoly's history.
 </div>
 </div>
 
@@ -439,16 +483,20 @@ up.fragment.abort('.region')
 ---
 
 Reacting to a fragment being aborted
------------------------------------
+------------------------------------
 
-Use `up.fragment.onAborted(fragment, callback)` to react when fragment or its ancestor is aborted on its layer.
+When your own components is waiting for something async (e.g. a request or a timeout),\
+it may want to react when its element (or an ancestor) is aborted.
 
-A fragment is also aborted before it is removed from the DOM (through `up.destroy()` or a fragment update).
+Some use cases ffrom Unpoly's own features:
+
+- Polling stops when the reloading fragment is aborted
+- Pending validations are aborted when the observed field is aborted
+
 
 
 ---
 <!-- _class: no-watermark -->
-
 
 This compiler will follow a link after 5 seconds:
 
@@ -459,12 +507,14 @@ up.compiler('a[auto-follow]', function(link) {
 })
 ```
 
-We now have a race condition:
+There is a race condition in the code above:
 
-- Timer starts
-- User follows different link (1)
-- While the user link is loading, the timer elapses and follows the original link
-- The user request (1) is aborted
+- Timer (1) starts
+- User follows different link (2)
+- While the user link is loading, the timer (1) elapses and follows the original link
+- The user request (2) is aborted
+
+---
 
 Using `up.fragment.onAborted()` we can stop the timer if the link is targeted while waiting:
 
@@ -475,13 +525,8 @@ up.compiler('a[auto-follow]', function(link) {
 })
 ```
 
-
-----
-
-More use cases for `up.fragment.onAborted()` from Unpoly's own features:
-
-- Polling stops when the fragment is aborted
-- Pending validations are aborted when the observed field is aborted
+Note that a fragment is also aborted before it is removed from the DOM\
+(through `up.destroy()` or a fragment swap). Hence we don't need an additional destructor.
 
 
 ---
@@ -500,8 +545,11 @@ Exemption: Don't abort me
 To make a request that will not be aborted by another fragment update, use `{ abortable: false }` or `[up-abortable=false]`.
 
 
-Preloading
-----------
+---
+
+
+What about preloading?
+----------------------
 
 Preloading never aborts targeted fragments.
 
@@ -571,16 +619,18 @@ Or any given CSS selector:
 
 ----
 
-Concurrent `[up-validate]`: Consistency without disabling
---------------------------------------------------------
+Eventual consistency guaranteee for `[up-validate]`
+---------------------------------------------------
 
-- Sometimes we don't want to disable because of user speed or optics (gray fields)
-- Unpoly 3 has an alternative solution for forms with many `[up-validate]` dependencies
-- Multiple `[up-validate]` targets are batched into a single render pass with multiple targets
+Sometimes we don't want to disable because of user speed or optics (gray fields).\
+Unpoly 3 has an alternative solution for forms where many fields update other fields.
+
+- Multiple updates from `[up-validate]` or `up.validate()`\
+  are batched into a single render pass with multiple targets.
 - Duplicate or nested targets are merged
-- Only one concurrent request.\
+- Unpoly guarantees only one concurrent validation request per form.\
   Additional validations are queued until the current validation request has loaded.
-- Form will eventually show a consistent state, regardless how fast the user clicks or how slow the network is.
+- The Form will eventually show a consistent state, regardless how fast the user clicks or how slow the network is.
 
 
 ----
@@ -600,7 +650,7 @@ Concurrent `[up-validate]`: Consistency without disabling
 <div class="row" style="font-size: 0.9em">
 <div class="col">
 
-### Unpoly 2
+### Unpoly 2: Race conditions
 
 - User changes continent
 - Request for `[name=country]` starts
@@ -612,7 +662,7 @@ Concurrent `[up-validate]`: Consistency without disabling
 </div>
 <div class="col" style="flex-grow: 1.2">
 
-### Unpoly 3
+### Unpoly 3: Eventual consistency
 
 - User changes continent
 - Request for `[name=country]` starts
@@ -698,11 +748,19 @@ Or globally:
 up.on('up:fragment:offline', (event) => if (confirm('Retry'?)) event.retry())
 ```
 
+Or substitute content:
+
+```js
+up.on('up:fragment:offline', (event) => up.render(event.renderOptions.target, {
+  content: "You are offline."
+}))
+```
+
 
 ----
 
-Handling "Lie-Fi"
------------------
+Handling ["Lie-Fi"](https://www.urbandictionary.com/define.php?term=lie-fi)
+---------------------------------------------------------------------------
 
 Often our device reports a connection, but we're effectively offline:
 
@@ -723,18 +781,19 @@ Expired pages remain accessible while offline
 ---------------------------------------------
 
 - Cached content will remain navigatable for 90 minutes
-- Revalidation will fail
+- Revalidation will fail, but no not change the page and trigger `onOffline()`
 - Clicking uncached content will not change the page and trigger `onOffline()`
 
 
 ---
 
 
-Limitations: This isn't full offline support (yet)
---------------------------------------------------
+Limitations
+-----------
 
-- The cache is still in-memory and dies with the browser tab
-- To fill up the cache the device must be online for the first part of the session
+While Unpoly 3 lets you handle disconnects, it's not full "offline" support:
+
+- To fill up the cache the device must be online for the first part of the session- The cache is still in-memory and dies with the browser tab
 - For a full offline experience (content with empty cache) we recommend a [service worker](https://web.dev/offline-fallback-page/) or a canned solution like [UpUp](https://www.talater.com/upup/) (similarities in name are coincidental)
 
 
@@ -1173,6 +1232,13 @@ Many other features and fixes
 =============================
 
 See [full CHANGELOG](https://github.com/unpoly/unpoly/blob/master/CHANGELOG.md).
+
+
+
+---
+<!-- _class: topic -->
+
+# Closing
 
 
 
