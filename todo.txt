@@ -1,7 +1,7 @@
 Slides
 ------
 
-- Possibly remove Last-Modified from all examples and just use ETags
+- Upload to triskweline.de/unpoly3-slides
 
 
 Day of presentation

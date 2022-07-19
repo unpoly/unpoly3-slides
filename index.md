@@ -122,6 +122,8 @@ This has many benefits:
 <img src="images/cache.svg" height="100%">
 
 ---
+<!-- _class: pro -->
+
 
 ### `up.network.config.cacheExpireAge`
 
@@ -139,6 +141,8 @@ This has many benefits:
 
 
 ---
+<!-- _class: pro -->
+
 
 Controlling when to revalidate
 ------------------------------
@@ -161,6 +165,7 @@ You may also disable revalidation for an individual link:
 
 
 ---
+<!-- _class: pro -->
 
 Migrating Unpoly 2 apps
 -----------------------
@@ -170,7 +175,7 @@ Since caching is now without drawbacks, you may want to remove any exemptions in
 #### Remove custom expiry times:
 
 ```js
-up.network.config.cacheExpiry = 10_0000
+up.network.config.cacheExpiry = 15_0000
 ```
 
 #### Remove individual links bypassing the cache
@@ -212,13 +217,10 @@ await up.render(..).finished
 Does revalidation cause more requests?
 --------------------------------------
 
-**No**.
-
 With revalidation your app will make as many requests as a plain web app\
-(but users still benefit from seeing cached content immediately).
+**or** as an Unpoly 2 app with short cache expiry.
 
-With revalidation your app will make as many requests as an Unpoly 2 app with short cache expiry.\
-Many of our projects have configured cache expiry to "fix" stale content.
+Remember that many of our projects have configured cache expiry to "fix" stale content.
 
 **Optionally** your app can support *conditional requests* so reloading is effectively free for the server.
 
@@ -358,9 +360,9 @@ Your app should probably support conditional requests
 This improves **all** cases where we access a previously visited page:
 
 - Reduced server load (no server-side rendering required for unchanged content)
-- Less data transmitted (think slow connections, mobile data plans!)
+- Less data transmitted (think slow connections, mobile data plans)
 - Cheap cache revalidation
-- Cheap [`[up-poll]`](https://unpoly.com/up-poll)
+- Cheap polling with [`[up-poll]`](https://unpoly.com/up-poll)
 - Prevent unnecessary DOM swaps of identical content (client-side performance)
 
 
@@ -538,18 +540,10 @@ up.compiler('a[auto-follow]', function(link) {
 Note that a fragment is also aborted before it is removed from the DOM\
 (through `up.destroy()` or a fragment swap). Hence we don't need an additional destructor.
 
----
-
-Some other cases from Unpoly's own features:
-
-- Polling stops when the reloading fragment is aborted
-- Pending validations are aborted when the observed field is aborted
-
-
 
 ---
 
-Exemption: Don't abort others
+Don't abort others
 ------------------
 
 To not abort requests targeting the same fragments,\
@@ -557,10 +551,11 @@ render with `{ abort: false }` or `[up-abort=false]`.
 
 
 
-Exemption: Don't abort me
+Don't abort me
 --------------
 
-To make a request that will not be aborted by another fragment update, use `{ abortable: false }` or `[up-abortable=false]`.
+To make a request that will not be aborted by another fragment update,\
+use `{ abortable: false }` or `[up-abortable=false]`.
 
 
 ---
@@ -571,13 +566,13 @@ What about preloading?
 
 Preloading never aborts targeted fragments.
 
-Programmatic preloading with `up.link.preload()` is not abortable by default in Unpoly 3.\
+Programmatic preloading with `up.link.preload()` is no longer abortable by default in Unpoly 3.
 
 You can use this to populate the cache while the user is navigating:
 
 ```js
 up.compiler('.main-nav', function(nav) {
-  nav.querySelectorAll('a').forEach(up.link.preload)
+  nav.querySelectorAll('a[href]').forEach(up.link.preload)
 })
 ```
 
@@ -615,7 +610,7 @@ This form has **race conditions** in Upoly 2:
 - Request 2 targeting `[name=price]` starts
 - User changes continent again
 - Request 3 targeting `[name=country]` starts
-- Three responses arrive and render in random order
+- Three responses arrive and render in random order 💥
 
 
 ---
@@ -648,17 +643,36 @@ Or any given CSS selector:
 
 ---
 
+### Form before user input
+
+All fields are enabled.
+
 <img src="./images/form-from-hell.svg" alt="A form with many dependent fields" class="picture" style="width: 80%">
+
+---
+
+### User selects different country
+
+All fields disable to prevent concurrent input.
+
+<img src="./images/form-from-hell.disabled.svg" alt="A form is disabled while validating" class="picture" style="width: 80%">
+
+---
+
+### Validation has completed
+
+All fields are re-enabled.
+
+<img src="./images/form-from-hell.re-enabled.svg" alt="A form is re-enabled after validation is done" class="picture" style="width: 80%">
 
 
 ----
 
-<h2>
-  Don't want to disable?
-</h2>
+## Consistency without disabling
 
-Sometimes we don't want to disable because of user speed or optics (gray fields).\
-Unpoly 3 has an <b>second</b> solution for forms where many fields update other fields.
+Sometimes we don't want to disable because of optics (gray fields) or to not prevent user input.
+
+Unpoly 3 has an <b>second</b> solution for forms with many dependencies.
 
 
 ----
@@ -678,7 +692,7 @@ Unpoly 3 has an <b>second</b> solution for forms where many fields update other 
 <div class="row" style="font-size: 0.9em">
 <div class="col">
 
-### Unpoly 2: Race conditions
+### Unpoly 2: <span class="negative">Race conditions</span>
 
 - User changes continent
 - Request 1 for `[name=country]` starts
@@ -690,7 +704,7 @@ Unpoly 3 has an <b>second</b> solution for forms where many fields update other 
 </div>
 <div class="col" style="flex-grow: 1.2">
 
-### Unpoly 3: Eventual consistency
+### Unpoly 3: <span class="positive">Eventual consistency</span>
 
 - User changes continent
 - Request 1 for `[name=country]` starts
@@ -726,14 +740,13 @@ Watching fields for changes
 `[up-observe]` is now `[up-watch]`\
 `up.observe()` is now `up.watch()`
 
-Watching fields gets a lot of useful options.
+Every form field can configure options for watching and validation.
 
 ---
 
 Field-specific watch options
 ----------------------------
 
-Every form field can configure individual options for watching and validation.\
 Options can be set for a field, the entire form or any container element.
 
 #### `[up-watch-event]`
@@ -786,7 +799,7 @@ Unpoly 3 lets you handle connection loss with an `{ onOffline }` or `[up-on-offl
 <a href="..." up-on-offline="if (confirm('Retry'?) event.retry()">Post bid</a>
 ```
 
-Or globally:
+You may also configure a global handler:
 
 ```js
 up.on('up:fragment:offline', function(event) {
@@ -794,7 +807,7 @@ up.on('up:fragment:offline', function(event) {
 })
 ```
 
-Or substitute content:
+You may also do something other than retrying, like substituting content:
 
 ```js
 up.on('up:fragment:offline', function(event) {
@@ -842,7 +855,7 @@ While Unpoly 3 lets you handle disconnects, it's not full "offline" support:
 - To fill up the cache the device must be online for the first part of the session (warm start)
 - The cache is still in-memory and dies with the browser tab
 
-For a full offline experience (cold start) we recommend a [service worker](https://web.dev/offline-fallback-page/)\
+For a comprehensive offline experience (cold start) we recommend a [service worker](https://web.dev/offline-fallback-page/)\
 or a canned solution like [UpUp](https://www.talater.com/upup/) (no relation to Unpoly).
 
 
@@ -952,7 +965,9 @@ These three elements produce the same compiler data:
 
 ```html
 <div up-data='{ "foo": "one", "bar": "two" }'></div>
+
 <div data-foo='one' data-bar='two'></div>
+
 <div up-data='{ "foo": "one" }' data-bar='bar'></div>
 ```
 
@@ -1113,6 +1128,7 @@ You can also set `[up-bad-response-time]` on an individual link:
 
 
 ----
+<!-- _class: pro -->
 
 Extensive render callbacks
 ==========================
@@ -1141,7 +1157,7 @@ Strict target derivation
 ========================
 
 
-Unpoly often needs to *derive* a target selector from an element.\
+Unpoly often needs to guess a target selector that will match an element.\
 Some features that do this are `[up-poll]`, `up.reload()`, `[up-hungry]`.
 
 ```js
@@ -1169,7 +1185,7 @@ The target derivation in Unpoly 2 sometimes produces a weak selector that won't 
 <link rel="canonical" href="..." up-hungry>
 ```
 
-Here the `[up-hungry]` element would targets `link`, matching the stylesheet instead.
+Here the `[up-hungry]` element would targets `link`, matching the stylesheet instead. 💥
 
 
 ---
@@ -1199,7 +1215,7 @@ up.fragment.config.targetDerivers = [
 
 Note that tag names are now only used for unique elements (like `<body>` or `<main>`).
 
-You can also push a function if your deriver can't be expressed in a pattern string.
+You can also push a `Function(Element): string?` if your deriver can't be expressed in a pattern.
 
 
 ---
@@ -1217,6 +1233,7 @@ You should fix these bugs by setting an `[id]`, `[up-id]` or `[class]` attribute
 
 
 ---
+<!-- _class: pro -->
 
 Detect failure when server sends incorrect HTTP status
 ======================================================
@@ -1232,6 +1249,7 @@ Unfortunately misconfigured server endpoints will send HTTP 200 (OK) for failed 
 This is not always easy to fix, e.g. when screens are rendered by libraries outside your control.
 
 ---
+<!-- _class: pro -->
 
 Forcing failure
 ---------------
@@ -1259,6 +1277,8 @@ up.network.config.fail = (response) =>
 
 
 ---
+<!-- _class: pro -->
+
 
 Focus restoration
 =================
@@ -1273,6 +1293,8 @@ Saved state includes:
 - The scroll position within a focused input element.
 
 ---
+<!-- _class: pro -->
+
 
 Explicit focus restoration
 ------------------------
@@ -1286,10 +1308,10 @@ an updating fragment.
 
 ---
 
-IE11 removal
-============
+IE11 removal 🎉
+===============
 
-Unpoly 3 will no longer boot on IE11 or [legacy Edge (EdgeHTML)](https://en.wikipedia.org/wiki/EdgeHTML).\
+Unpoly 3 will no longer boot on IE11 or [legacy Edge](https://en.wikipedia.org/wiki/EdgeHTML).\
 If you need to support Internet Explorer 11, use Unpoly 2.
 
 This allowed us to delete a lot of internal code.
@@ -1297,7 +1319,7 @@ This allowed us to delete a lot of internal code.
 
 ---
 
-Functions with a native replacement have been moved to `unpoly-migrate.js`:
+Public functions with a native replacement have been moved to `unpoly-migrate.js`:
 
 | Deprecated function | Native replacement |
 |---------------------|--------------------|
@@ -1337,34 +1359,11 @@ Probably none with [`unpoly-migrate.js`](https://unpoly.com/changes/upgrading).
 
 You should test if you're seeing any errors with:
 
-- Strict target derivation
+- Strict target derivation (this is a bug in your app!)
 - Cache revalidation
 
-----
-
-### Strict target derivation
-
-Disable with:
-
-```js
-up.fragment.config.verifyDerivedTarget = false
-up.fragment.config.targetDerivers.push('*')
-```
-
----
-
-### Cache Revalidation
-
-Disable with:
-
-```js
-up.fragment.config.autoRevalidate = false
-up.network.config.cacheEvictAge = up.network.config.cacheExpireAge = 15 * 60 * 1000
-```
-
 
 ----
-
 
 
 Unpoly 3 objectives

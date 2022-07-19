@@ -130,18 +130,24 @@ section.topic h1 {
 
 section.pro:before,
 section.new:before {
-  content: 'NERD';
+  content: 'EXT';
   background-color: white;
   position: absolute;
   left: -110px;
   top: -60px;
+
+  top: 0;
+  left: 0;
   text-align: center;
-  padding: 90px 90px 10px;
+  padding: 90px 0 10px;
+  width: 260px;
   color: white;
   background-color: var(--textColor);
-  font-size: 28px;
+  font-size: 26px;
   font-weight: bold;
   transform: rotate(-45deg);
+  xtransform-origin: 0% 100%;
+  transform-origin: 0% 135%;
   /* box-shadow: 0 5px 40px rgba(40, 40, 40, 0.2); */
 }
 
