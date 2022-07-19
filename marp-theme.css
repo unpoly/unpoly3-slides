@@ -38,6 +38,7 @@ section.rails-specific {
 
 code, pre {
   background-color: rgba(245, 245, 245, 0.8);
+  border-radius: 2px;
 }
 
 /*
@@ -129,7 +130,7 @@ section.topic h1 {
 
 section.pro:before,
 section.new:before {
-  content: 'JAN';
+  content: 'NERD';
   background-color: white;
   position: absolute;
   left: -110px;

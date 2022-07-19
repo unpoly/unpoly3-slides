@@ -1,1 +1,22 @@
+Slides
+------
+
 - Possibly remove Last-Modified from all examples and just use ETags
+
+
+Day of presentation
+-------------------
+
+- Morgens im Slack ankündigen
+- Um 13:10 im Slack Meet-Link im Slack posten
+- OBS vorher starten
+
+
+After presentation
+------------------
+
+- Nach dem Call Video posten
+- Record video for English users
+- Schedule tweets for each slide
+
+

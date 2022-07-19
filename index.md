@@ -24,6 +24,7 @@ It enables fast and flexible frontends while keeping rendering logic on the serv
 **This presentation is for experienced Unpoly users\
 who want to learn about the major changes in Unpoly 3.**
 
+Unpoly 3 is scheduled to release in late summer 2022.
 
 
 ----
@@ -66,6 +67,7 @@ Unpoly 3 objectives
 # This will be a smooth update
 
 - Upgrade from v2 to v3 will be *much* smoother than going from v1 to v2.
+- No changes in HTML or CSS provided by Unpoly.
 - Almost all are breaking changes are polyfilled by [`unpoly-migrate.js`](https://unpoly.com/changes/upgrading).
 - Unpoly 3 keeps aliases for deprecated APIs going back to 2016.\
   You can upgrade from v1 to v3 (without going through v2).
@@ -97,6 +99,7 @@ Unpoly 3 fixes all of this with *cache revalidation*.
 
 The cache in Unpoly 3 now follows a *stale-while-revalidate* pattern.
 After rendering stale content from the cache, Unpoly automatically reloads the fragment.
+
 This process is called *cache revalidation*.
   
 In effect Unpoly always renders twice:
@@ -108,7 +111,8 @@ This has many benefits:
 
 - This allows a very long cache eviction time,
   allowing instant navigation for 90 minutes.
-- We no longer need to clear the cache after a form submission.
+- We no longer need to clear the cache after a form submission.\
+  We just mark all cache entries as stale. 
 - Because we always revalidate cached content, the user always sees fresh content!
 
 
@@ -121,15 +125,17 @@ This has many benefits:
 
 ### `up.network.config.cacheExpireAge`
 
-- Defaults to 15 seconds (down from 5 minutes in Unpoly 2)
 - When cached content exceeds this age we perform cache revalidation\
  (reload a rendered fragment)
+- This should only cover the time between preloading and rendering.
+- Defaults to 15 seconds (down from 5 minutes in Unpoly 2)
 
 
 ### `up.network.config.cacheEvictAge`
 
-- Defaults to 90 minutes (lower for low-memory devices)
 - When cached content exceeds this age we delete it from the cache
+- This limit exists mostly to limit memory consumption.
+- Defaults to 90 minutes (lower for low-memory devices).
 
 
 ---
@@ -143,6 +149,7 @@ The default setting is:
 
 
 ```js
+// A response older than up.network.config.cacheExpireAge is stale
 up.fragment.config.autoRevalidate = (response) => response.stale
 ```
 
@@ -158,7 +165,7 @@ You may also disable revalidation for an individual link:
 Migrating Unpoly 2 apps
 -----------------------
 
-Since caching is now always desired, you may want to remove any exemptions in your app.
+Since caching is now without drawbacks, you may want to remove any exemptions in your app.
 
 #### Remove custom expiry times:
 
@@ -185,6 +192,7 @@ up.network.config.autoCache = (request) => !request.path.startsWith('/dashboard'
 
 
 ---
+<!-- _class: pro -->
 
 ## Revalidation happens after `up.render()` settles
 
@@ -201,12 +209,13 @@ await up.render(..).finished
 
 ---
 
-Does this cause more requests?
-------------------------------
+Does revalidation cause more requests?
+--------------------------------------
 
 **No**.
 
-With revalidation your app will make as many requests as a plain web app.
+With revalidation your app will make as many requests as a plain web app\
+(but users still benefit from seeing cached content immediately).
 
 With revalidation your app will make as many requests as an Unpoly 2 app with short cache expiry.\
 Many of our projects have configured cache expiry to "fix" stale content.
@@ -246,7 +255,7 @@ Last-Modified: Wed, 15 Nov 2000 13:11:22 GMT
 ...
 ```
 
-When the browser reloads is echoes the earlier modification time:
+When the browser revisits the same URL is echoes the earlier modification time:
 
 ```http
 GET /foo HTTP/1.1
@@ -281,7 +290,7 @@ ETag: "x234dff"
 ...
 ```
 
-When the browser reloads is echoes the earlier hash:
+When the browser revisits the same URL is echoes the earlier hash:
 
 ```http
 GET /foo HTTP/1.1
@@ -348,10 +357,11 @@ Your app should probably support conditional requests
 
 This improves **all** cases where we access a previously visited page:
 
-- Speed up page loads without Unpoly
-- Less server load for cache revalidation.
-- Less server load for [`[up-poll]`](https://unpoly.com/up-poll)
-- Prevent unnecessary re-rendering of identical content.
+- Reduced server load (no server-side rendering required for unchanged content)
+- Less data transmitted (think slow connections, mobile data plans!)
+- Cheap cache revalidation
+- Cheap [`[up-poll]`](https://unpoly.com/up-poll)
+- Prevent unnecessary DOM swaps of identical content (client-side performance)
 
 
 ----
@@ -363,9 +373,12 @@ Implementing conditional requests in Ruby on Rails
 
 **If you're not a Rails user**, skip to a slide without the Rails logo ↗.
 
+While you can manually manage and compare `request.headers['ETag']` and `response.headers['ETag']` in your controllers, Rails ships with helpers to help deal with ETags.
+
 
 ----
 <!-- _class: rails-specific -->
+
 ```ruby
 class PostsController < AppplicationController
 
@@ -392,24 +405,23 @@ class PostsController < AppplicationController
 
 end
 ```
+[Full controller example](https://makandracards.com/makandra/19041-a-simpler-default-controller-implementation-2022-update)
 
 
-
-
-----
+---
 <!-- _class: rails-specific -->
-
-
 
 Default ETags in Rails
 ----------------------
 
-Even without `fresh_when` Rails produces a default ETag by hashing the response body.\
-You still pay the rendering time, but won't transmit unchanged HTML.
+Even without `fresh_when` Rails [produces a default ETag](https://rdoc.info/github/rack/rack/Rack/ETag) by hashing the response body.
 
-This default ETag has issues with random tokens (CSRF token, CSP nonce).\
-Use [`Rack::SteadyETag`](https://github.com/makandra/rack-steady_etag) to address this.
+❌ You still pay the rendering time\
+✅ You won't transmit unchanged HTML.\
+✅ You won't re-render unchanged content.
 
+This default ETag has issues with random tokens (CSRF token, CSP nonce),\
+causing ETags to never match. Use our [`Rack::SteadyETag`](https://github.com/makandra/rack-steady_etag) gem to address this.
 
 
 ----
@@ -418,7 +430,7 @@ Use [`Rack::SteadyETag`](https://github.com/makandra/rack-steady_etag) to addres
 All of this is optional!
 ------------------------
 
-Cache revalidation will work **with or without** conditional request support.
+Unpoly's cache revalidation will work **with or without** conditional request support.
 
 If your app does not support conditional requests, cache revalidation will cause as many requests as an Unpoly 2 app with short cache expiry.
 
@@ -446,10 +458,10 @@ The answer to that changed throughout Unpoly's history.
 
 Responses would be rendered in whatever order they arrive.
 
-### Unpoly 2: Abort all other requests when navigating
+### Unpoly 2: Abort all pending requests when navigating
 
-The last request would be the one rendered.\
-This also aborted background requests, or requests for unrelated regions like `side`.
+This mimics standard browser behavior, where clicking a link aborts earlier clicks.\
+Unfortunately this also aborted background requests, or requests for unrelated regions like `side`.
 
 ### Unpoly 3: Abort requests within the targeted fragment only
 
@@ -458,8 +470,8 @@ This also aborted background requests, or requests for unrelated regions like `s
 ---
 
 
-Aborting requests targeting a fragment
---------------------------------------
+Targeting a fragment will abort conflicting requests
+-----------------------------------------------------
 
 Clicking this link will automatically cancel requests targeting `.region` or its descendants:
     
@@ -486,12 +498,8 @@ Reacting to a fragment being aborted
 ------------------------------------
 
 When your own components is waiting for something async (e.g. a request or a timeout),\
-it may want to react when its element (or an ancestor) is aborted.
-
-Some use cases ffrom Unpoly's own features:
-
-- Polling stops when the reloading fragment is aborted
-- Pending validations are aborted when the observed field is aborted
+it may want to react when its element (or an ancestor) is aborted.\
+This can prevent race conditions in your app.
 
 
 
@@ -502,7 +510,8 @@ This compiler will follow a link after 5 seconds:
 
 ```js
 up.compiler('a[auto-follow]', function(link) {
-  let timer = setTimeout(() => up.follow(link), 5000)
+  let followLink = () => up.follow(link)
+  let timer = setTimeout(followLink, 5000) // (1)
   return () => clearTimeout(timer)
 })
 ```
@@ -510,8 +519,8 @@ up.compiler('a[auto-follow]', function(link) {
 There is a race condition in the code above:
 
 - Timer (1) starts
-- User follows different link (2)
-- While the user link is loading, the timer (1) elapses and follows the original link
+- While the timer (1) is waiting, the user follows different link (2)
+- While the user link (2) is loading, the timer (1) elapses and follows the original link
 - The user request (2) is aborted
 
 ---
@@ -520,13 +529,22 @@ Using `up.fragment.onAborted()` we can stop the timer if the link is targeted wh
 
 ```js
 up.compiler('a[auto-follow]', function(link) {
-  let timer = setTimeout(() => up.follow(link), 5000)
+  let followLink = () => up.follow(link)
+  let timer = setTimeout(followLink, 5000)
   up.fragment.onAborted(link, () => clearTimeout(timer))
 })
 ```
 
 Note that a fragment is also aborted before it is removed from the DOM\
 (through `up.destroy()` or a fragment swap). Hence we don't need an additional destructor.
+
+---
+
+Some other cases from Unpoly's own features:
+
+- Polling stops when the reloading fragment is aborted
+- Pending validations are aborted when the observed field is aborted
+
 
 
 ---
@@ -553,8 +571,15 @@ What about preloading?
 
 Preloading never aborts targeted fragments.
 
-Programmatic preloading with `up.link.preload()` is not abortable by default.\
-You can use this to populate the cache while the user is navigating.
+Programmatic preloading with `up.link.preload()` is not abortable by default in Unpoly 3.\
+
+You can use this to populate the cache while the user is navigating:
+
+```js
+up.compiler('.main-nav', function(nav) {
+  nav.querySelectorAll('a').forEach(up.link.preload)
+})
+```
 
 
 
@@ -563,9 +588,14 @@ You can use this to populate the cache while the user is navigating.
 
 
 Forms where everything depends on everything
-======================================
+=========================================
+
+<img src="./images/form-from-hell.svg" alt="A form with many dependent fields" class="picture" style="width: 80%">
 
 
+----
+
+## We can build this with `[up-validate]`, but.….
 
 ```html
 <form method="post" action="/purchases">
@@ -577,15 +607,15 @@ Forms where everything depends on everything
 </form>
 ```
 
-This form has race conditions in Upoly 2:
+This form has **race conditions** in Upoly 2:
 
 - User changes continent
-- Request targeting `[name=country]` starts
+- Request 1 targeting `[name=country]` starts
 - User changes weight
-- Request targeting `[name=price]` starts
+- Request 2 targeting `[name=price]` starts
 - User changes continent again
-- Request targeting `[name=country]` starts
-- Responses arrive and render in random order
+- Request 3 targeting `[name=country]` starts
+- Three responses arrive and render in random order
 
 
 ---
@@ -616,21 +646,19 @@ Or any given CSS selector:
 <form up-submit up-disable="input[name=email]">
 ```
 
+---
+
+<img src="./images/form-from-hell.svg" alt="A form with many dependent fields" class="picture" style="width: 80%">
+
 
 ----
 
-Eventual consistency guaranteee for `[up-validate]`
----------------------------------------------------
+<h2>
+  Don't want to disable?
+</h2>
 
 Sometimes we don't want to disable because of user speed or optics (gray fields).\
-Unpoly 3 has an alternative solution for forms where many fields update other fields.
-
-- Multiple updates from `[up-validate]` or `up.validate()`\
-  are batched into a single render pass with multiple targets.
-- Duplicate or nested targets are merged
-- Unpoly guarantees only one concurrent validation request per form.\
-  Additional validations are queued until the current validation request has loaded.
-- The Form will eventually show a consistent state, regardless how fast the user clicks or how slow the network is.
+Unpoly 3 has an <b>second</b> solution for forms where many fields update other fields.
 
 
 ----
@@ -653,11 +681,11 @@ Unpoly 3 has an alternative solution for forms where many fields update other fi
 ### Unpoly 2: Race conditions
 
 - User changes continent
-- Request for `[name=country]` starts
+- Request 1 for `[name=country]` starts
 - User changes weight
-- Request for `[name=price]` starts
+- Request 2 for `[name=price]` starts
 - User changes continent again
-- Request for `[name=country]` starts
+- Request 3 for `[name=country]` starts
 - Responses arrive and render in random order
 </div>
 <div class="col" style="flex-grow: 1.2">
@@ -665,26 +693,40 @@ Unpoly 3 has an alternative solution for forms where many fields update other fi
 ### Unpoly 3: Eventual consistency
 
 - User changes continent
-- Request for `[name=country]` starts
+- Request 1 for `[name=country]` starts
 - User changes weight
 - User changes continent again
-- Response for `[name=country]` received and rendered
-- Request for `[name=price], [name=country]` starts
-- Response for `[name=price], [name=country]` received and rendered
+- Response 1 received and rendered
+- Request 2 for `[name=price], [name=country]` starts
+- Response 2 received and rendered
 </div>
 </div>
 
 
 ----
 
+Eventual consistency guarantee for <code>[up-validate]</code>
+-------
 
-Watch rework
-============
+- Multiple updates from `[up-validate]` or `up.validate()`\
+  are batched into a single render pass with multiple targets.
+- Duplicate or nested targets are consolidated.
+- Unpoly guarantees only one concurrent validation request per form.\
+  Additional validations are queued until the current validation request has loaded.
+- The form will eventually show a consistent state,\
+  regardless how fast the user clicks or how slow the network is.
+
+
+---
+
+
+Watching fields for changes
+===========================
 
 `[up-observe]` is now `[up-watch]`\
 `up.observe()` is now `up.watch()`
 
-They gain more options.
+Watching fields gets a lot of useful options.
 
 ---
 
@@ -717,7 +759,9 @@ Example
 
 ```html
 <form method="post" action="/purchases">
-  <select name="continent" up-validate="[name=country]" up-watch-disable="[name=country]">...</select>
+  <select name="continent" up-validate="[name=country]" up-watch-disable="[name=country]">
+    ...
+  </select>
   <select name="country" up-validate="[name=price]">...</select>
   <input name="weight" up-validate="[name=price]" up-watch-event="input"> kg
   <output name="price">23 €</output>
@@ -745,15 +789,17 @@ Unpoly 3 lets you handle connection loss with an `{ onOffline }` or `[up-on-offl
 Or globally:
 
 ```js
-up.on('up:fragment:offline', (event) => if (confirm('Retry'?)) event.retry())
+up.on('up:fragment:offline', function(event) {
+  if (confirm('Retry'?)) event.retry()
+})
 ```
 
 Or substitute content:
 
 ```js
-up.on('up:fragment:offline', (event) => up.render(event.renderOptions.target, {
-  content: "You are offline."
-}))
+up.on('up:fragment:offline', function(event) {
+  up.render(event.renderOptions.target, { content: "You are offline." })
+})
 ```
 
 
@@ -771,8 +817,8 @@ Often our device reports a connection, but we're effectively offline:
 Unpoly 3 handles Wi-Fi with timeouts:
 
 - All requests have a default timeout of 90 seconds (`up.network.config.timeout`)
+- Timeouts will now trigger `onOffline()` and use your offline handling
 - Customize timeouts per-request with `{ timeout }`, `[up-timeout]` options
-- Timeouts will now trigger `onOffline()` (used to by `onAborted()`)
 
 
 ----
@@ -781,7 +827,7 @@ Expired pages remain accessible while offline
 ---------------------------------------------
 
 - Cached content will remain navigatable for 90 minutes
-- Revalidation will fail, but no not change the page and trigger `onOffline()`
+- Revalidation will fail, but not change the page and trigger `onOffline()`
 - Clicking uncached content will not change the page and trigger `onOffline()`
 
 
@@ -793,9 +839,11 @@ Limitations
 
 While Unpoly 3 lets you handle disconnects, it's not full "offline" support:
 
-- To fill up the cache the device must be online for the first part of the session- The cache is still in-memory and dies with the browser tab
-- For a full offline experience (content with empty cache) we recommend a [service worker](https://web.dev/offline-fallback-page/) or a canned solution like [UpUp](https://www.talater.com/upup/) (similarities in name are coincidental)
+- To fill up the cache the device must be online for the first part of the session (warm start)
+- The cache is still in-memory and dies with the browser tab
 
+For a full offline experience (cold start) we recommend a [service worker](https://web.dev/offline-fallback-page/)\
+or a canned solution like [UpUp](https://www.talater.com/upup/) (no relation to Unpoly).
 
 
 
@@ -811,9 +859,13 @@ While Unpoly 3 lets you handle disconnects, it's not full "offline" support:
 Optional targets
 ================
 
-The following would require fragments matching `.content` and `.navigation`.
+If you suffix a target selector with `:maybe` it will only be updated if there is a match in both the current page and server response (like `[up-hungry]`).
 
-The fragment `.flashes` will only be updated if there is a match in both the current page and server response (like `[up-hungry]`).
+## Example
+
+The following would require fragments matching `.content` and `.navigation`.\
+If `.flashes` is missing in either current page or server response, no error
+is thrown.
 
 ```html
 <a href="/post" up-target=".content, .flashes:maybe, .navigation">
@@ -839,11 +891,14 @@ By default Unpoly only considers `[up-hungry]` fragments in the updating layer.
 
 With `[up-if-layer=any]` a hungry fragment will be considered for updates in *any* layer.
 
+
+### Example
+
 A use case is notification elements in the application layout:
 
 ```html
-<div class="flashes" up-if-layer="any">...</div>
-<div class="unread-messages" up-if-layer="any">...</div>
+<div class="flashes" up-hungry up-if-layer="any">...</div>
+<div class="unread-messages" up-hungry up-if-layer="any">...</div>
 ```
 
 
@@ -856,11 +911,14 @@ By default Unpoly considers `[up-hungry]` fragments for any update in its layer.
 
 With `[up-if-target]` you can restrict which updates a hungry fragment will piggy-back on.
 
+
+### Example
+
 A use case is a canonical `<link>` element that should only update when we update a [main element](https://unpoly.com/main),
 but not when we update smaller fragments:
 
 ```html
-<link rel="canonical" href="..." up-if-target=":main" />
+<link rel="canonical" href="..." up-hungry up-if-target=":main" />
 ```
 
 ----
@@ -887,7 +945,8 @@ It would feel more natural to use HTML5 data attributes instead:
 
 ---
 
-In Unpoly 3 Simple data key/values can be attached with both `[up-data]` and HTML5 data attributes.
+In Unpoly 3 simple data key/values can be attached with both `[up-data]`\
+and HTML5 data attributes.
 
 These three elements produce the same compiler data:
 
@@ -904,8 +963,19 @@ up.compiler('div', function(element, data) {
 })
 ```
 
-Note that HTML5 data attributes are always strings.
+Note that HTML5 data attributes are always flat objects with string values.\
+If you need to serialize something like an array of numbers, use `[up-data]`.
 
+
+---
+<!-- _class: rails-specific -->
+
+<b>Ruby on Rails users</b> can now use the `{ data }` option of any element helper\
+to pass data to compilers:
+
+```ruby
+content_tag(:div, '...', data: { foo: 'one', bar: 'two' })
+```
 
 
 ---
@@ -916,7 +986,7 @@ Highlighting the targeted fragment
 Targeted fragments get an `.up-loading` class.\
 This lets you highlight the part of the screen that's loading.
 
-Targeted fragments also get an [`[aria-busy]`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-busy) attribute.
+Targeted fragments also get an [`[aria-busy]`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-busy) attribute for accessibility.
 
 ---
 
@@ -933,7 +1003,7 @@ A link targeting a fragment:
 While the request is loading:
 
 ```html
-<a href="/path" up-target=".target" up-active>
+<a href="/path" up-target=".target" class="up-active">
 <div class="target" class="up-loading" aria-busy>old text</div>
 ```
 
@@ -949,7 +1019,8 @@ Once the fragment is updated all classes and attributes are removed:
 Log separated by interactions
 =============================
 
-The log has a lot of debug information. It's often hard to find where the relevant output begins and ends.
+The log has a lot of debug information.\
+It's often hard to find where the relevant output begins and ends.
 
 The new log shows which user interaction triggered an event chain.
 
@@ -964,7 +1035,8 @@ The new log shows which user interaction triggered an event chain.
 Playing nice with foreign overlays
 =================================
 
-Unpoly 2 sometimes clashes with overlays from other libraries ("foreign overlay") like Bootstrap or TinyMCE:
+Unpoly 2 sometimes clashes with overlays from other libraries ("foreign overlay")\
+like Bootstrap or TinyMCE:
 
 - Clicking a foreign overlay closes an Unpoly overlay
 - Unpoly steals focus from a foreign overlay
@@ -990,9 +1062,9 @@ Example from `unpoly-bootstrap5.js`:
 
 ```js
 up.layer.config.foreignOverlaySelectors.push(
-'.modal',
-'.popover',
-'.dropdown-menu'
+  '.modal',
+  '.popover',
+  '.dropdown-menu'
 )
 ```
 
@@ -1002,7 +1074,7 @@ up.layer.config.foreignOverlaySelectors.push(
 More control over the progress bar
 ==================================
 
-Unpoly 2 shows a progress bar when any request takes too long to load.
+Unpoly 2.1 has introduced a progress bar that shows while a request takes too long to load.
 
 This may be unwanted for requests are loading in the background, or have longer load
 times in the best of cases (e.g. a large report).
@@ -1016,7 +1088,7 @@ Unpoly 3 gives you more control over if and when the progress bar shows.
 Background requests
 --------------------
 
-Pass { background: true } or [up-background] when rendering or making a request
+Pass `{ background: true }` or `[up-background]` when rendering or making a request
 
 Background requests never trigger the progress bar.\
 Background requests are also deprioritized.
@@ -1028,6 +1100,7 @@ Background requests are also deprioritized.
 
 
 ---
+<!-- _class: pro -->
 
 Custom target response times
 ----------------------------
@@ -1084,12 +1157,19 @@ order of priority:
 - The element's `[class]` names, ignoring `up.fragment.config.badTargetClasses`.
 - The element's tag name
 
-This sometimes produces a weak selector that won't uniquely identify the element.
+
+---
+
+## When target derivation goes wrong
+
+The target derivation in Unpoly 2 sometimes produces a weak selector that won't uniquely identify the element:
 
 ```html
 <link rel="stylesheet" href="...">
-<link rel="canonical" href="..." up-hungry> <!-- targets "link", matching the stylesheet -->
+<link rel="canonical" href="..." up-hungry>
 ```
+
+Here the `[up-hungry]` element would targets `link`, matching the stylesheet instead.
 
 
 ---
@@ -1128,9 +1208,12 @@ Derived target verification
 ---------------------------
 
 - Unpoly 3 will verify if a derived targets will actually match the element.
-- If another element is matched, an error is thrown.
-- This may throw errors in existing apps with ambiguous selectors.\
-  You probably want to fix these cases by setting an `[id]`, `[up-id]` or `[class]` attribute.
+- If another element is matched, the next pattern is tried.
+- If no pattern produces a matching target, an error is thrown.
+
+This *may* throw errors in existing apps with ambiguous selectors.\
+This means your app is updating the wrong fragments!\
+You should fix these bugs by setting an `[id]`, `[up-id]` or `[class]` attribute.
 
 
 ---
@@ -1138,7 +1221,7 @@ Derived target verification
 Detect failure when server sends incorrect HTTP status
 ======================================================
 
-Unpoly can render different content for [failed responses](https://unpoly.com/server-errors).\
+Unpoly can update different targets for [failed responses](https://unpoly.com/server-errors).\
 E.g. a successful form submission should the main element when successful.\
 When there are validation errors we want to re-render the form instead.
 
@@ -1157,8 +1240,11 @@ Listeners to `up:fragment:loaded` can now force a failure, even for responses th
 
 ```js
 up.on('up:fragment:loaded', (event) => {
+  console.log(response.status) // => 200
+
   if (event.response.headers['X-Authentication-Error']) {
     // Force Unpoly to use render options for failure
+    // despite the `200 OK` status code.
     event.renderOptions.fail = true
   }
 })
@@ -1192,8 +1278,8 @@ Explicit focus restoration
 ------------------------
 
 - `<a href="/path" up-follow up-focus="restore">`
-- up.render({ focus: 'restore' })
-- up.viewport.restoreFocus()
+- `up.render({ focus: 'restore' })`
+- `up.viewport.restoreFocus()`
 
 Note that Unpoly already had `{ focus: 'keep' }` to preserve focus within
 an updating fragment.
@@ -1279,10 +1365,37 @@ up.network.config.cacheEvictAge = up.network.config.cacheExpireAge = 15 * 60 * 1
 
 ----
 
+
+
 Unpoly 3 objectives
 ===================
 
-Repeat card from intro
+<div class="row">
+<div class="col" style="flex-grow: 1.5">
+
+### Concurrency
+
+- User clicking faster than the server can respond
+- Multiple requests targeting the same fragment
+- Forms where everything depends on everything else
+- Responses arrive in different order than requests
+- Multiple users working on the same backend data (stale caches)
+- User losing connection while requests are in flight
+- Lie-Fi (spotty Wi-Fi, EDGE, tunnel)
+</div>
+<div class="col">
+
+### Quality of live improvements
+
+- Optional targets
+- More control over `[up-hungry]`
+- Shorter data attributes
+- More render callbacks
+- Strict target derivation
+- Better feedback
+- Log separated by interactions
+- Foreign overlays
+</div>
 
 
 ---
