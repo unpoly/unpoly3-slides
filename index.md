@@ -51,7 +51,7 @@ Unpoly 3 objectives
 
 - Optional targets
 - More control over `[up-hungry]`
-- Shorter data attributes
+- HTML5 data attributes
 - More render callbacks
 - Strict target derivation
 - Better feedback
@@ -827,7 +827,7 @@ Often our device reports a connection, but we're effectively offline:
 - Car drives into tunnel
 - Overcrowded Wi-fi with massive packet loss
 
-Unpoly 3 handles Wi-Fi with timeouts:
+Unpoly 3 handles Lie-Fi with timeouts:
 
 - All requests have a default timeout of 90 seconds (`up.network.config.timeout`)
 - Timeouts will now trigger `onOffline()` and use your offline handling
@@ -937,8 +937,8 @@ but not when we update smaller fragments:
 ----
 
 
-Shorter data attributes
-=======================
+Attaching data with HTML5 data attributes
+=========================================
 
 
 Unpoly always had [`[up-data]`](https://unpoly.com/up-data) to attach structured data to an element.
@@ -1388,7 +1388,7 @@ Unpoly 3 objectives
 
 - Optional targets
 - More control over `[up-hungry]`
-- Shorter data attributes
+- HTML5 data attributes
 - More render callbacks
 - Strict target derivation
 - Better feedback
@@ -1402,7 +1402,7 @@ Unpoly 3 objectives
 Availability
 ============
 
-Unpoly 3 is scheduled to release in late summer 2022.
+Unpoly 3 is scheduled to release in **late summer 2022**.
 
 
 ---
