@@ -38,6 +38,7 @@ section.rails-specific {
 
 code, pre {
   background-color: rgba(245, 245, 245, 0.8);
+  background-color: rgba(0, 0, 0, 0.05);
   border-radius: 2px;
 }
 
@@ -92,6 +93,7 @@ h4 {
 .row {
   display: flex;
   gap: 2em;
+  justify-content: flex-start;
 }
 
 
@@ -124,6 +126,17 @@ h4 {
 
 section.topic h1 {
   font-size: 2.6em;
+  font-family: Orbitron, sans-serif;
+  text-transform: uppercase;
+}
+
+section.topic h1 + h2 {
+  margin-top: -0.5em;
+  color: #777777;
+}
+
+h1.topic {
+  font-size: 2.2em;
   font-family: Orbitron, sans-serif;
   text-transform: uppercase;
 }
@@ -170,7 +183,7 @@ section.small-padding {
 }
 
 .positive {
-  color: #37c04e;
+  color: #35be4c;
 }
 
 .negative {
@@ -204,6 +217,14 @@ th {
   text-align: left;
 }
 
+/* img {
+  width: auto;
+  max-width: 100%;
+  display: inline-block;
+  margin: 0 !important;
+} */
+
+
 img.picture {
   border: 1px solid #555;
   border-radius: 3px;
@@ -235,4 +256,28 @@ li:before {
   color: var(--secondaryColor);
   position: absolute;
   left: 0;
+}
+
+.tag {
+  background-color: var(--textColor);
+  color: white;
+  font-weight: bold;
+  display: inline-block;
+  padding: 0.1em 0.3em 0.05em;
+  border-radius: 0.1em;
+  font-size: 0.8em;
+  text-transform: uppercase;
+}
+
+.admonition {
+  padding: 0.7em;
+  background-color: #eee;
+  color: #444;
+  background-color: #fdf3d0;
+  color: #6a4b16;
+  margin: 0.6em 0;
+}
+
+.admonition > *:last-child {
+  margin-bottom: 0;
 }

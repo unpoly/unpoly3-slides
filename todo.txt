@@ -2,6 +2,8 @@ Slides
 ------
 
 - Upload to triskweline.de/unpoly3-slides
+- Explain that we will skip **EXT** but will be available
+- Full text search
 
 
 Day of presentation
@@ -10,6 +12,7 @@ Day of presentation
 - Morgens im Slack ankündigen
 - Um 13:10 im Slack Meet-Link im Slack posten
 - OBS vorher starten
+- Intro per tab sharen
 
 
 After presentation
