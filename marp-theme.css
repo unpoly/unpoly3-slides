@@ -2,10 +2,14 @@
 
 @import 'default';
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,300;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
 html {
+  /* The Marp default CSS sets `font-weight: 600` for elements like headings,
+     but our font has no 600 weight available. */
+  --base-text-weight-semibold: 700;
 }
 
 section {
@@ -18,7 +22,7 @@ section {
   --secondaryColor: #3182bd;
 }
 
-section:not(.no-watermark):not(.title) {
+section:not(.no-watermark):not(.title):not(.separator):not(.tweet) {
   background-image: url('./images/unpoly3.svg');
   background-position: top 40px right 40px;
   background-size: 250px;
@@ -40,6 +44,7 @@ code, pre {
   background-color: rgba(245, 245, 245, 0.8);
   background-color: rgba(0, 0, 0, 0.05);
   border-radius: 2px;
+  font-family: 'Roboto Mono', monospace;
 }
 
 /*
@@ -61,6 +66,22 @@ h1 {
 
 section.secondary-color {
   --highlightColor: var(--secondaryColor);
+}
+
+section.separator {
+  background-color: #555555;
+}
+
+
+section.tweet {
+  background-color: #1DA1F2;
+  color: white;
+  font-weight: bold;
+}
+
+section.tweet time {
+  display: block;
+  opacity: 0.6;
 }
 
 h1 code,
@@ -280,4 +301,8 @@ li:before {
 
 .admonition > *:last-child {
   margin-bottom: 0;
+}
+
+.color-text {
+  color: var(--textColor);
 }

@@ -215,7 +215,7 @@ E.g. a successful form submission should the main element when successful.\
 When there are validation errors we want to re-render the form instead.
 
 For this to work Unpoly requires servers to signal failure with an HTTP error code.\
-E.g. an invalid form should render with HTTP 400 (Bad Request).
+E.g. an invalid form should render with HTTP 422 (Unprocessable Entity).
 
 Unfortunately misconfigured server endpoints will send HTTP 200 (OK) for failed responses.\
 This is not always easy to fix, e.g. when screens are rendered by libraries outside your control.
